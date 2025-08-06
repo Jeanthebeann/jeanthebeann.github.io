@@ -3,7 +3,7 @@ function login() {
     const error = document.getElementById('error');
 
     // Example check: Only allow "Jeff" or "Alice"
-    if (username.toLowerCase() === "jiwoo" || username === "지우" || username === "이지우" || username.toLowerCase() === "lee jiwoo") {
+    if (username === "엄마" ) {
         window.location.href = "confess.html"; // redirect to another page
     } 
     else {
