@@ -2,11 +2,11 @@
     box-sizing: border-box;
     margin:0;
     padding: 0;
-    font-family: "Titillium Web", sans-serif;
+    font-family: "Chicle", serif;
 }
 
 .navbar{
-    background: #131313;
+    background: #5197B8;
     height: 80px;
     display: flex;
     justify-content: center;
@@ -30,8 +30,8 @@
 }
 
 #navbar__logo{
-    background: #fff;
-    background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%); 
+    background: #dda15e;
+    background-image: linear-gradient(to top, #fff3dc 0%, #fff3dc 100%); 
     background-size: 100%;
     -webkit-background-clip: text;
     -moz-background-clip: text;
@@ -60,7 +60,7 @@
 }
 
 .navbar__links{
-    color:#fff;
+    color:#12344a;
     display:flex;
     align-items: center;
     justify-content: center;
@@ -88,12 +88,12 @@
     border: none;
     outline: none;
     border-radius: 4px;
-    background: #f77062;
-    color:#fff;
+    background: #12344a;
+    color:#fff3dc;
 }
 
 .button:hover{
-    background: #4837ff;
+    background: #f77062;
     transition: all 0.3s ease;
 
 }
@@ -201,7 +201,7 @@
 }
 
 .main{
-    background-color: #141414;
+    background-color: #fff3dc;
 }
 
 .main__container{
@@ -211,54 +211,53 @@
     justify-self: center;
     margin: 0 auto;
     height: 90vh;
-    background-color: #141414;
+    background-color: #fff3dc;
     z-index: 1;
     width: 100%;
     max-width: 1300px;
     padding-top: 0 50px;
 }
 
-.main__content h1{
-    font-size: 4rem;
+.main__content h1 {
+    font-size: 6rem;
+    font-weight: 900;
     margin-left: 2rem;
-    background-color: #ff8177;
-    background-image: linear-gradient(to top, #ff0844 0%, #ffb19f 100% );
+    line-height: 1.1;
+    background-image: linear-gradient(to top, #12344a 0%, #12344a 100%);
     background-size: 100%;
     -webkit-background-clip: text;
-    -moz-background-clip: text;
     -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent; 
+ 
 }
 
-.main__content h2{
-    font-size: 2rem;
+.main__content h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
     margin-left: 2rem;
-    background-color: #fff;
-    background-image: linear-gradient(to top, #ff0844 0%, #ffb19f 100% );
+    background-image: linear-gradient(to top, #72A3C7 0%, #72A3C7 100%);
     background-size: 100%;
     -webkit-background-clip: text;
-    -moz-background-clip: text;
     -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent; 
+
 }
 
-.main__content p{
-    font-size: 1rem;
+.main__content p {
+    font-size: 1.4rem;
+    font-weight: 700;
     margin-left: 2rem;
-    background-color: #fff;
-    background-image: linear-gradient(to top, #ff0844 0%, #ffb19f 100% );
+    margin-top: 0.5rem;
+    background-image: linear-gradient(to top, #12344a 0%, #12344a 100%);
     background-size: 100%;
     -webkit-background-clip: text;
-    -moz-background-clip: text;
     -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent; 
+
 }
 
 .main__btn{
     color: #fff;
     font-size: 1rem;
     margin-left: 2rem;
-    background-image: linear-gradient(to top, #f77062 0%, #ffb19f 100%);
+    background-image: linear-gradient(to top, #72A3C7 0%, #72A3C7 100%);
     padding: 13px 33px;
     border: none;
     border-radius: 5px;
