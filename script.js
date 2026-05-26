@@ -1,7 +1,14 @@
-const menu = document.querySelector('#mobile-menu')
-const menuLinks = document.querySelector(".navbar__menu")
+const playButton = document.getElementById("playButton");
 
-menu.addEventListener('click', function(){
-    menu.classList.toggle('is-active')
-    menuLinks.classList.toggle('active')
-})
+playButton.addEventListener("click", () => {
+
+  const username = document.getElementById("username").value;
+
+  if (username.trim() === "") {
+    alert("Please enter a username.");
+    return;
+  }
+
+  alert(`Welcome ${username}!`);
+
+});
