@@ -9,7 +9,10 @@ playButton.addEventListener("click", () => {
     return;
   }
 
-  alert(`Welcome ${username}!`);
-  
+  // save username locally for leaderboard later 
+  localStorage.setItem("username", username);
+
+  // we gamin
+  window.location.href = "game.html";
 
 });
