@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BLOCKBLAST GAME</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <main class="container">
+
+    <h1 class="title">BLOCKBLAST</h1>
+
+    <div class="card">
+
+      <h2 id="welcomeText"></h2>
+
+      <p>The game will go here later.</p>
+
+    </div>
+
+  </main>
+
+  <script>
+    const username = localStorage.getItem("username");
+
+    document.getElementById("welcomeText").innerText =
+      `Welcome, ${username}!`;
+  </script>
+
+</body>
+</html>
