@@ -1,18 +1,16 @@
-const playButton = document.getElementById("playButton");
+document.addEventListener("DOMContentLoaded", () => {
+  const playButton = document.getElementById("playButton");
+  const usernameInput = document.getElementById("username");
 
-playButton.addEventListener("click", () => {
+  playButton.addEventListener("click", () => {
+    const username = usernameInput.value.trim();
 
-  const username = document.getElementById("username").value;
+    if (username === "") {
+      alert("Please enter a username.");
+      return;
+    }
 
-  if (username.trim() === "") {
-    alert("Please enter a username.");
-    return;
-  }
-
-  // save username locally for leaderboard later 
-  localStorage.setItem("username", username);
-
-  // we gamin
-  window.location.href = "game.html";
-
+    localStorage.setItem("username", username);
+    window.location.href = "./game.html";
+  });
 });
