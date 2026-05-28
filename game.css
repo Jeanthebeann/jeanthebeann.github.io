@@ -33,9 +33,17 @@ body {
   font-size: clamp(2.5rem, 8vw, 5rem);
   font-weight: 900;
 
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 
   letter-spacing: 4px;
+}
+
+#welcomeText {
+  margin-bottom: 10px;
+}
+
+#scoreText {
+  margin-bottom: 20px;
 }
 
 .game-board {
@@ -64,5 +72,88 @@ body {
   background: rgba(255,255,255,0.1);
 
   border-radius: 8px;
+
+  cursor: pointer;
+
+  transition: 0.15s ease;
+}
+
+.cell:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+.filled {
+  background: #3b82f6;
+}
+
+.pieces-container {
+
+  margin-top: 30px;
+
+  display: flex;
+
+  gap: 30px;
+
+  justify-content: center;
+  align-items: center;
+
+  flex-wrap: wrap;
+}
+
+.piece {
+
+  display: grid;
+
+  gap: 4px;
+
+  padding: 10px;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  transition: 0.15s ease;
+}
+
+.piece:hover {
+  transform: scale(1.05);
+}
+
+.piece.selected {
+  outline: 3px solid #facc15;
+}
+
+.piece-cell {
+
+  width: 30px;
+  height: 30px;
+
+  background: #22c55e;
+
+  border-radius: 6px;
+}
+
+.empty-piece-cell {
+  background: transparent;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .title {
+    font-size: 3rem;
+  }
+
+  .piece-cell {
+    width: 22px;
+    height: 22px;
+  }
+
+  .pieces-container {
+    gap: 15px;
+  }
 
 }
