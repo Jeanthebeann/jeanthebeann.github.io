@@ -51,7 +51,7 @@ function renderBoard() {
       cell.dataset.row = row;
       cell.dataset.col = col;
 
-      if (board[row][col] === 1) {
+      if (board[row][col] === 1 || board[row][col] === 2) {
         cell.classList.add("filled");
       }
 
@@ -163,20 +163,20 @@ function handlePointerUp(event) {
 
       currentPieces[dragging.index] = null;
 
-      clearFullLines();
-      updateScore();
-      renderBoard();
-      renderPieces();
+      const clearedSomething = clearFullLines();
 
-      if (currentPieces.every(piece => piece === null)) {
-        generatePieces();
-      }
-
-      if (isGameOver()) {
-        setTimeout(() => {
-          alert(`Game Over! Final Score: ${score}`);
-          startGame();
-        }, 200);
+      if (clearedSomething) {
+        animateClearLines(() => {
+          updateScore();
+          renderBoard();
+          renderPieces();
+          continueAfterPlacement();
+        });
+      } else {
+        updateScore();
+        renderBoard();
+        renderPieces();
+        continueAfterPlacement();
       }
     } else {
       dragging.originalElement.classList.remove("hidden-piece");
@@ -226,7 +226,9 @@ function canPlace(shape, startRow, startCol) {
         if (boardRow < 0 || boardRow >= boardSize) return false;
         if (boardCol < 0 || boardCol >= boardSize) return false;
 
-        if (board[boardRow][boardCol] === 1) return false;
+        if (board[boardRow][boardCol] === 1 || board[boardRow][boardCol] === 2) {
+          return false;
+        }
       }
     }
   }
@@ -258,7 +260,7 @@ function clearFullLines() {
     let full = true;
 
     for (let row = 0; row < boardSize; row++) {
-      if (board[row][col] === 0) {
+      if (board[row][col] !== 1) {
         full = false;
         break;
       }
@@ -269,19 +271,67 @@ function clearFullLines() {
     }
   }
 
+  const linesCleared = rowsToClear.length + colsToClear.length;
+
+  if (linesCleared === 0) {
+    return false;
+  }
+
   rowsToClear.forEach(row => {
     for (let col = 0; col < boardSize; col++) {
-      board[row][col] = 0;
+      board[row][col] = 2;
     }
   });
 
   colsToClear.forEach(col => {
     for (let row = 0; row < boardSize; row++) {
-      board[row][col] = 0;
+      board[row][col] = 2;
     }
   });
 
-  score += (rowsToClear.length + colsToClear.length) * 100;
+  score += linesCleared * 100;
+
+  renderBoard();
+
+  return true;
+}
+
+function animateClearLines(callback) {
+  const cells = document.querySelectorAll(".cell");
+
+  cells.forEach(cell => {
+    const row = Number(cell.dataset.row);
+    const col = Number(cell.dataset.col);
+
+    if (board[row][col] === 2) {
+      cell.classList.add("clearing");
+    }
+  });
+
+  setTimeout(() => {
+    for (let row = 0; row < boardSize; row++) {
+      for (let col = 0; col < boardSize; col++) {
+        if (board[row][col] === 2) {
+          board[row][col] = 0;
+        }
+      }
+    }
+
+    callback();
+  }, 350);
+}
+
+function continueAfterPlacement() {
+  if (currentPieces.every(piece => piece === null)) {
+    generatePieces();
+  }
+
+  if (isGameOver()) {
+    setTimeout(() => {
+      alert(`Game Over! Final Score: ${score}`);
+      startGame();
+    }, 200);
+  }
 }
 
 function isGameOver() {
