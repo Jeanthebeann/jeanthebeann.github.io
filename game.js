@@ -3,7 +3,9 @@ const boardSize = 8;
 let board = [];
 let score = 0;
 let currentPieces = [];
-let draggedPiece = null;
+
+let dragging = null;
+let dragClone = null;
 
 const gameBoard = document.getElementById("gameBoard");
 const scoreText = document.getElementById("scoreText");
@@ -53,21 +55,6 @@ function renderBoard() {
         cell.classList.add("filled");
       }
 
-      cell.addEventListener("dragover", event => {
-        event.preventDefault();
-      });
-
-      cell.addEventListener("drop", event => {
-        event.preventDefault();
-
-        if (!draggedPiece) return;
-
-        const dropRow = Number(cell.dataset.row);
-        const dropCol = Number(cell.dataset.col);
-
-        handleDrop(dropRow, dropCol);
-      });
-
       gameBoard.appendChild(cell);
     }
   }
@@ -93,74 +80,140 @@ function renderPieces() {
   currentPieces.forEach((shape, index) => {
     if (shape === null) return;
 
-    const pieceElement = document.createElement("div");
-
+    const pieceElement = createPieceElement(shape);
     pieceElement.classList.add("piece");
-    pieceElement.draggable = true;
-    pieceElement.style.gridTemplateColumns =
-      `repeat(${shape[0].length}, 30px)`;
+    pieceElement.dataset.index = index;
 
-    shape.forEach(row => {
-      row.forEach(cell => {
-        const block = document.createElement("div");
-
-        block.classList.add("piece-cell");
-
-        if (cell === 0) {
-          block.classList.add("empty-piece-cell");
-        }
-
-        pieceElement.appendChild(block);
-      });
-    });
-
-    pieceElement.addEventListener("dragstart", event => {
-      draggedPiece = {
-        shape: shape,
-        index: index
-      };
-
-      event.dataTransfer.setData("text/plain", index);
-    });
-
-    pieceElement.addEventListener("dragend", () => {
-      draggedPiece = null;
+    pieceElement.addEventListener("pointerdown", event => {
+      startDragging(event, shape, index, pieceElement);
     });
 
     piecesContainer.appendChild(pieceElement);
   });
 }
 
-function handleDrop(row, col) {
-  const shape = draggedPiece.shape;
+function createPieceElement(shape) {
+  const pieceElement = document.createElement("div");
 
-  if (!canPlace(shape, row, col)) {
-    alert("You can't place that piece there.");
-    return;
+  pieceElement.style.gridTemplateColumns =
+    `repeat(${shape[0].length}, 30px)`;
+
+  shape.forEach(row => {
+    row.forEach(cell => {
+      const block = document.createElement("div");
+      block.classList.add("piece-cell");
+
+      if (cell === 0) {
+        block.classList.add("empty-piece-cell");
+      }
+
+      pieceElement.appendChild(block);
+    });
+  });
+
+  return pieceElement;
+}
+
+function startDragging(event, shape, index, originalElement) {
+  event.preventDefault();
+
+  dragging = {
+    shape,
+    index,
+    originalElement
+  };
+
+  originalElement.classList.add("hidden-piece");
+
+  dragClone = createPieceElement(shape);
+  dragClone.classList.add("piece", "dragging-clone");
+
+  document.body.appendChild(dragClone);
+
+  moveDragClone(event.clientX, event.clientY);
+
+  document.addEventListener("pointermove", handlePointerMove);
+  document.addEventListener("pointerup", handlePointerUp);
+}
+
+function handlePointerMove(event) {
+  if (!dragging || !dragClone) return;
+
+  moveDragClone(event.clientX, event.clientY);
+}
+
+function moveDragClone(x, y) {
+  dragClone.style.left = `${x}px`;
+  dragClone.style.top = `${y}px`;
+}
+
+function handlePointerUp(event) {
+  if (!dragging) return;
+
+  const targetCell = getCellUnderPointer(event.clientX, event.clientY);
+
+  if (targetCell) {
+    const row = Number(targetCell.dataset.row);
+    const col = Number(targetCell.dataset.col);
+
+    if (canPlace(dragging.shape, row, col)) {
+      placePiece(dragging.shape, row, col);
+
+      score += countBlocks(dragging.shape) * 10;
+
+      currentPieces[dragging.index] = null;
+
+      clearFullLines();
+      updateScore();
+      renderBoard();
+      renderPieces();
+
+      if (currentPieces.every(piece => piece === null)) {
+        generatePieces();
+      }
+
+      if (isGameOver()) {
+        setTimeout(() => {
+          alert(`Game Over! Final Score: ${score}`);
+          startGame();
+        }, 200);
+      }
+    } else {
+      dragging.originalElement.classList.remove("hidden-piece");
+    }
+  } else {
+    dragging.originalElement.classList.remove("hidden-piece");
   }
 
-  placePiece(shape, row, col);
+  cleanupDragging();
+}
 
-  score += countBlocks(shape) * 10;
+function getCellUnderPointer(x, y) {
+  dragClone.style.display = "none";
 
-  currentPieces[draggedPiece.index] = null;
-  draggedPiece = null;
+  const element = document.elementFromPoint(x, y);
 
-  clearFullLines();
-  updateScore();
-  renderBoard();
-  renderPieces();
+  dragClone.style.display = "grid";
 
-  if (currentPieces.every(piece => piece === null)) {
-    generatePieces();
+  if (!element) return null;
+
+  if (element.classList.contains("cell")) {
+    return element;
   }
 
-  if (isGameOver()) {
-    setTimeout(() => {
-      alert(`Game Over! Final Score: ${score}`);
-      startGame();
-    }, 200);
+  return element.closest(".cell");
+}
+
+function cleanupDragging() {
+  if (dragClone) {
+    dragClone.remove();
   }
+
+  dragClone = null;
+  dragging = null;
+
+  document.removeEventListener("pointermove", handlePointerMove);
+  document.removeEventListener("pointerup", handlePointerUp);
 }
 
 function canPlace(shape, startRow, startCol) {
