@@ -146,6 +146,26 @@ body {
   }
 }
 
+.controls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.controls button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #3b82f6;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.controls button:hover {
+  background: #2563eb;
+}
+
 @media (max-width: 600px) {
   .title {
     font-size: 3rem;
