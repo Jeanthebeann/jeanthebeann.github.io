@@ -166,6 +166,8 @@ function handlePointerUp(event) {
     const col = Number(targetCell.dataset.col);
 
     if (canPlace(dragging.shape, row, col)) {
+      saveState();
+      
       placePiece(dragging.shape, row, col);
 
       score += countBlocks(dragging.shape) * 10;
@@ -374,6 +376,63 @@ function countBlocks(shape) {
 
 function updateScore() {
   scoreText.innerText = `Score: ${score}`;
+}
+
+function saveState() {
+  const snapshot = {
+    board: structuredClone(board),
+    score: score,
+    currentPieces: structuredClone(currentPieces)
+  };
+
+  undoStack.push(snapshot);
+  redoStack = [];
+}
+
+function restoreState(snapshot) {
+  board = structuredClone(snapshot.board);
+  score = snapshot.score;
+  currentPieces = structuredClone(snapshot.currentPieces);
+
+  updateScore();
+  renderBoard();
+  renderPieces();
+}
+
+function undoMove() {
+  if (undoStack.length === 0) {
+    alert("Nothing to undo.");
+    return;
+  }
+
+  const currentState = {
+    board: structuredClone(board),
+    score: score,
+    currentPieces: structuredClone(currentPieces)
+  };
+
+  redoStack.push(currentState);
+
+  const previousState = undoStack.pop();
+  restoreState(previousState);
+}
+
+function redoMove() {
+  if (redoStack.length === 0) {
+    alert("Nothing to redo.");
+    return;
+  }
+
+  const currentState = {
+    board: structuredClone(board),
+    score: score,
+    currentPieces: structuredClone(currentPieces)
+  };
+
+  undoStack.push(currentState);
+
+  const nextState = redoStack.pop();
+  restoreState(nextState);
 }
 
 startGame();
