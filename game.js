@@ -328,6 +328,7 @@ function continueAfterPlacement() {
 
   if (isGameOver()) {
     setTimeout(() => {
+      saveScoreToLeaderboard();
       alert(`Game Over! Final Score: ${score}`);
       startGame();
     }, 200);
