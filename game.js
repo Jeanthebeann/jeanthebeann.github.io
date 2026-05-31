@@ -30,6 +30,15 @@ const pieceShapes = [
   [[1], [1], [1], [1]]
 ];
 
+let undoStack = [];
+let redoStack = [];
+
+const undoButton = document.getElementById("undoButton");
+const redoButton = document.getElementById("redoButton");
+
+undoButton.addEventListener("click", undoMove);
+redoButton.addEventListener("click", redoMove);
+
 function startGame() {
   board = Array.from({ length: boardSize }, () => Array(boardSize).fill(0));
   score = 0;
